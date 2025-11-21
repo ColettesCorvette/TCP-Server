@@ -16,14 +16,14 @@ int main() {
 	struct sockaddr_in client_addr;
 	socklen_t client_addr_len = sizeof(client_addr);
 
-	//initialisation du socket pour une communcation IPv4 utilisant le protocol TCP
+	//Initialisation du socket pour une communcation IPv4 utilisant le protocol TCP
 	if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 		perror("Failed to create the socket\n");
 		exit(EXIT_FAILURE);
 	}
 	printf("Successfully created socket\n");
 	
-	//création de l'adresse et du port du serveur 
+	//Création de l'adresse et du port du serveur 
 	struct sockaddr_in serv_addr;
 	memset(&serv_addr, 0, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET; //Format IPv4
@@ -33,17 +33,17 @@ int main() {
 	//Associe l'adresse au socket
 	if (bind(socket_fd, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0) {
 		perror("Failed to bind the address to the socket server\n");
-		exit(EXIT_FAILURE);	
+		exit(EXIT_FAILURE);
 	}
 	printf("Listening on port 11000...\n");
 	
-	//Autorisation du socket à écouter les connexions entrantes	
+	//Autorisation du socket à écouter les connexions entrantes
 	if (listen(socket_fd, MAXPENDING) < 0) {
 		perror("Failed to listen\n");
 		exit(EXIT_FAILURE);
 	}
 	
-	//attente de connexion
+	//Attente de connexion
 	if ((client_socket = accept(socket_fd, (struct sockaddr *)&client_addr, &client_addr_len)) < 0) {
 		perror("Failed to accept connection\n");
 		exit(EXIT_FAILURE);
@@ -51,16 +51,15 @@ int main() {
 	printf("Client connected\n");
 
 	char buffer[BUFFER_SIZE] = {0};
-	int valread;
-
-	// Lecture jusqu'à BUFFER_SIZE octets
+	int valread = 0;
+	
+	//Lecture jusqu'à BUFFER_SIZE en octets 
 	valread = recv(client_socket, buffer, BUFFER_SIZE, 0);
 
 	if(valread < 0) {
 		perror("Failed to retrieve data");
 	}
 	else {
-
 		buffer[valread] = '\0';
 		printf("Data received from client: %s\n", buffer);
 	}
